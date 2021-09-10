@@ -5,11 +5,41 @@ Library of the optimization problem, Optimization methods.
 import numpy as np 
 from autograd import grad as nabla
 from autograd import hessian
+from scipy.linalg import norm 
 
 class Optimization_methods():
-    def __init__(self, maxiter):
+    def __init__(self, maxiter, eps=1e-6):
         self.maxiter = maxiter
+        self.eps = eps
     
+    def check_converge(self, x1, x2):
+        """
+        check whether or not converges
+        
+        Input:
+            x1, x2: the value of x
+        Output:
+            True or False
+        """
+        if norm(x1 - x2) < self.eps:
+            return True 
+        else:
+            return False
+
+    def check_diverge(self, x1, x2):
+        """
+        check whether or not diverges
+
+        Input:
+            x1, x2: the value of x
+        Output:
+            True or False
+        """
+        if norm(x1 - x2) > 1e+5:
+            return True 
+        else:
+            return False 
+
     def update_gradient(self, curx, alpha, d):
         """
         update x (gradient method),
@@ -50,7 +80,34 @@ class Optimization_methods():
         ##################
         return tk 
 
-    def steepest_descent(self, func, curx, alpha, d, beta=0.1, gamma=1e-5):
+    def steepest_descent(self, func, xinit, beta=0.1, gamma=1e-5):
         """
         Steepest descent
+        Input:
+            func: objective function
+            xinit: the initial value of x
+        Output:
+            list of x and #Iter
         """
+        x_lst = [xinit]     # value list
+        itr = self.maxiter; flag = 1
+        ##### iteration #####
+        for i in range(1, self.maxiter):
+            curx = x_lst[-1]
+            grd = nabla(func)(curx).reshape(curx.shape) # current gradient
+            d = (-1)*grd    # update vector
+            alpha = self.linear_search(func, curx, d, beta, gamma)  # learning rate
+            newx = self.update_gradient(curx, alpha, d)
+            if self.check_converge(curx, newx) and flag == 1:
+                print("Converged. #Iter = {0}".format(i))
+                itr = i; flag = 0
+                break 
+            if self.check_diverge(curx, newx):
+                print("Diverge!")
+                break 
+            else:
+                x_lst.append(newx)
+        #####################
+        return np.array(x_lst), itr 
+
+

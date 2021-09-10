@@ -3,7 +3,7 @@ Library of the optimization problem, Test functions for optimization.
 https://en.wikipedia.org/wiki/Test_functions_for_optimization
 """
 
-import numpy as np 
+import autograd.numpy as np     # change this (ref.: https://github.com/HIPS/autograd/issues/416)
 from math import e
 
 class Test_function():
@@ -16,7 +16,7 @@ class Test_function():
         f(x) = An + sum_{i = 1}^n [x_i^2 - A cos(2 pi x_i)], where A = 10, -5.12 <= x_i <= 5.12,
         global minimum: f(0, ..., 0) = 0
         """
-        val = 10*self.n
+        val = 10.0*self.n
         for i in range(self.n):
             val += x[i]**2 - 10*np.cos(2*np.pi*x[i])
         return val 
@@ -148,7 +148,7 @@ class Test_function():
             f(-1.34941, 1.34941) = -2.06261
             f(-1.34941, -1.34941) = -2.06261
         """
-        val = abs(100 - np.sqrt(x[0]**2 + x[1]**2)/np.pi)
+        val = abs(100.0 - np.sqrt(x[0]**2 + x[1]**2)/np.pi)
         pos = np.sin(x[0])*np.sin(x[1])*np.exp(val)
         return -0.0001*((abs(pos) + 1)**(0.1))
     
@@ -159,8 +159,8 @@ class Test_function():
         global minimum:
             f(512, 404.2319) = -959.6407
         """
-        first_term = (-1)*(x[1] + 47)*np.sin(abs(x[0]/2 + (x[1] + 47)))
-        second_term = x[0]*np.sin(abs(x[0] - (x[1] + 47)))
+        first_term = (-1)*(x[1] + 47.0)*np.sin(np.sqrt(abs(x[0]/2 + (x[1] + 47.0))))
+        second_term = x[0]*np.sin(np.sqrt(abs(x[0] - (x[1] + 47.0))))
         return first_term - second_term 
     
     def holder_table(self, x):
