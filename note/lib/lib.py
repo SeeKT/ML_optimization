@@ -48,7 +48,7 @@ class Test_function():
         """
         val = 0 
         for i in range(self.n - 1):
-            val += 100*(x[i + 1] - x[i]**2) + (1 - x[i])**2 
+            val += 100*(x[i + 1] - x[i]**2)**2 + (1 - x[i])**2
         return val 
     
     def beale(self, x):
@@ -75,7 +75,7 @@ class Test_function():
     def booth(self, x):
         """
         Booth function,
-        f(x, y) = (x + 2y - 7)**2 + (2x + y - 5)**2, -10 <= x, y <= 10,
+        f(x, y) = (x + 2y - 7)^2 + (2x + y - 5)^2, -10 <= x, y <= 10,
         global minimum: f(1, 3) = 0
         """
         return (x[0] + 2*x[1] - 7)**2 + (2*x[0] + x[1] - 5)**2 
@@ -99,7 +99,7 @@ class Test_function():
     def levi(self, x):
         """
         Levi function N.13,
-        f(x, y) = sin(3 pi x)^2 + (x - 1)^2 (1 + sin(3 pi y)^2) + (y - 1)^2 (1 + sin(2 pi y)^2), -10 <= x <= 10,
+        f(x, y) = sin(3 pi x)^2 + (x - 1)^2 (1 + sin(3 pi y)^2) + (y - 1)^2 (1 + sin(2 pi y)^2), -10 <= x, y <= 10,
         global minimum: f(1, 1) = 0
         """
         val = np.sin(3*np.pi*x[0])**2 
@@ -150,7 +150,7 @@ class Test_function():
         """
         val = abs(100 - np.sqrt(x[0]**2 + x[1]**2)/np.pi)
         pos = np.sin(x[0])*np.sin(x[1])*np.exp(val)
-        return -0.0001*(abs(pos) + 1)**0.1
+        return -0.0001*((abs(pos) + 1)**(0.1))
     
     def eggholder(self, x):
         """
@@ -208,7 +208,8 @@ class Test_function():
     
     def styblinski_tang(self, x):
         """
-        f(x) = (sum_{i = 1}^n x_i^4 - 16x_i^2 + 5x_1) / 2, -5 <= x_i <= 5, 1 <= i <= n,
+        Styblinski-tang function
+        f(x) = (sum_{i = 1}^n x_i^4 - 16x_i^2 + 5x_i) / 2, -5 <= x_i <= 5, 1 <= i <= n,
         global minimum: -39.16617n < f(-2.903534, ..., -2.903534) < -39.16616n
         """
         val = 0 
