@@ -1,0 +1,22 @@
+########### Image file ###########
+FROM nvidia/cuda:11.0.3-devel-ubuntu20.04
+##################################
+
+########### update and install packages ###########
+# add "-y" to get rid of error
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get -y install python3 python3-pip && \
+    rm -rf /var/lib/apt/lists*
+###################################################
+
+########### create workspace ###########
+RUN mkdir /code
+WORKDIR /code
+ADD ./requirements.txt /code/
+########################################
+
+########### install packages via pip ###########
+RUN pip3 install -r requirements.txt
+ADD . /code/
+################################################

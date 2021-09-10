@@ -1,0 +1,15 @@
+############ Requirements Packages ############
+pylint
+numpy
+scipy
+sympy
+matplotlib
+statsmodels
+sklearn
+pandas
+ipykernel
+jupyter
+autograd
+torch
+torchvision
+plotly
