@@ -2,7 +2,7 @@
 Library of the optimization problem, Optimization methods.
 """
 
-import numpy as np 
+import autograd.numpy as np 
 from autograd import grad as nabla
 from autograd import hessian
 from scipy.linalg import norm 
@@ -101,7 +101,6 @@ class Optimization_methods():
             if self.check_converge(curx, newx) and flag == 1:
                 print("Converged. #Iter = {0}".format(i))
                 itr = i; flag = 0
-                break 
             if self.check_diverge(curx, newx):
                 print("Diverge!")
                 break 
@@ -111,3 +110,32 @@ class Optimization_methods():
         return np.array(x_lst), itr 
 
 
+    def newton(self, func, xinit):
+        """
+        Newton
+        Input:
+            func: objective function
+            xinit: the initial value of x
+        Output:
+            list of x and #Iter
+        """
+        x_lst = [xinit]     # value list
+        alpha = 1
+        itr = self.maxiter; flag = 1 
+        ##### iteration #####
+        for i in range(1, self.maxiter):
+            curx = x_lst[-1]
+            grd = nabla(func)(curx).reshape(curx.shape) # current gradient
+            hesse = hessian(func)(curx).reshape((curx.size, curx.size))
+            d = (-1)*np.linalg.inv(hesse) @ grd 
+            newx = self.update_gradient(curx, alpha, d)
+            if self.check_converge(curx, newx) and flag == 1:
+                print("Converged. #Iter = {0}".format(i))
+                itr = i; flag = 0
+            if self.check_diverge(curx, newx):
+                print("Diverge!")
+                break 
+            else:
+                x_lst.append(newx)
+        #####################
+        return np.array(x_lst), itr 

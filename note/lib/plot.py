@@ -2,7 +2,7 @@
 Library of the optimization problem, Plot the contour and the surface of the function
 """
 
-import numpy as np
+import autograd.numpy as np
 import os 
 import matplotlib.pyplot as plt 
 from mpl_toolkits.mplot3d import Axes3D
@@ -50,10 +50,11 @@ class Plot_func():
         ax.set_xlim([x_range[0], x_range[-1]]); ax.set_ylim([y_range[0], y_range[-1]])
         ax.set_title("Iter = {0}".format(frame))
         ax.contour(X, Y, Z, cmap='bwr')     # contour
+        ax.scatter(x_val[0], y_val[0], c='k')
         ax.plot(x_val[:frame], y_val[:frame], c='m')        # trajectory
 
 
-    def plot_contour(self, func, x_range, y_range, x_val, y_val, itr, func_name):
+    def plot_contour(self, func, x_range, y_range, x_val, y_val, itr, func_name, method_name):
         """
         plot the contour of the function (2 dim), animation
 
@@ -72,7 +73,7 @@ class Plot_func():
         fig_dir = base_dir + "{0}/".format(func_name)
         if not os.path.isdir(fig_dir):
             os.makedirs(fig_dir)
-        fig_name = "contour_{0}".format(func_name)
+        fig_name = "contour_{0}_{1}".format(func_name, method_name)
         png_name = fig_dir + fig_name + ".png"
         eps_name = fig_dir + fig_name + ".eps"
         gif_name = fig_dir + fig_name + ".gif"
@@ -82,7 +83,7 @@ class Plot_func():
         fig = plt.figure(figsize=(8, 5.25))
         fig.subplots_adjust(bottom=0.15, left=0.175)
         ax = fig.add_subplot(1,1,1)
-        ani = animation.FuncAnimation(fig, self.update_animation, fargs=(ax, x_range, y_range, X, Y, Z, x_val, y_val), frames=itr, interval=200)
+        ani = animation.FuncAnimation(fig, self.update_animation, fargs=(ax, x_range, y_range, X, Y, Z, x_val, y_val), frames=itr + 1, interval=200)
         ani.save(gif_name, writer="Pillow")
         ################
 
