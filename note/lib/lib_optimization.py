@@ -70,7 +70,7 @@ class Base_optimization():
         for i in range(1, self.maxiter):
             curx = x_lst[-1]        # current x
             d = getupd(func, curx)  # update vector
-            eps = getrate(func, curx, d)  # learning rate
+            eps = getrate(func, curx, i, d)  # learning rate
             newx = self.update_gradient(curx, eps, d)
             if self.check_converge(func, curx, newx) and flag == 1:
                 print("Converged. #Iter = {0}".format(i))

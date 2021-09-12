@@ -19,7 +19,7 @@ class Steepest(Base_optimization):
         grd = nabla(func)(x).reshape(x.shape)
         return (-1)*grd 
     
-    def getrate_steepest(self, func, x, d):
+    def getrate_steepest(self, func, x, i, d):
         """
         get learning rate for steepest method
         """

@@ -19,7 +19,7 @@ class Newton(Base_optimization):
         hesse = hessian(func)(x).reshape((x.size, x.size))
         return (-1)*np.linalg.inv(hesse) @ grd 
     
-    def getrate_newton(self, func, x, d):
+    def getrate_newton(self, func, x, i, d):
         """
         get learning rate for Newton
         """
