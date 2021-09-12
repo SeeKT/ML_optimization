@@ -13987,8 +13987,8 @@ $$ \nabla f(\boldsymbol{x}^{*}) = 0 \tag{2}$$<p>である．非線形関数 $f$ 
 $$ \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} d(\boldsymbol{x}^k) &lt; 0 \tag{3}$$<p>を満たすならば， $\nabla f(\boldsymbol{x}^k)$ ($f(\boldsymbol{x}^k)$ からの最急増加方向) と $d(\boldsymbol{x}^k)$ は鈍角をなす．</p>
 <p>$\rightsquigarrow$ $d(\boldsymbol{x}^k)$ は $f$ の降下方向を示す．</p>
 <p>よって，降下方向ベクトル $d(\boldsymbol{x}^k)$ を見つけ，</p>
-$$ \boldsymbol{x}^{k + 1} = \boldsymbol{x}^k + \alpha_k d(\boldsymbol{x}^k) \tag{4}$$<p>という修正を行うという方針をとる．$\alpha_k$ はステップ幅または<strong>学習率</strong>と呼ばれる実数である．</p>
-<p>$d(\boldsymbol{x}^k)$ や $\alpha_k$ をどのように見つけるかによってアルゴリズムが決まる．</p>
+$$ \boldsymbol{x}^{k + 1} = \boldsymbol{x}^k + \varepsilon_k d(\boldsymbol{x}^k) \tag{4}$$<p>という修正を行うという方針をとる．$\varepsilon_k$ はステップ幅または<strong>学習率</strong>と呼ばれる実数である．</p>
+<p>$d(\boldsymbol{x}^k)$ や $\varepsilon_k$ をどのように見つけるかによってアルゴリズムが決まる．</p>
 
 </div>
 </div>
@@ -14000,24 +14000,24 @@ $$ d(\boldsymbol{x}^k) = - \nabla f(\boldsymbol{x}^k) \tag{5}$$<p>を用いる�
 <li>$d(\boldsymbol{x}^k)$ は $\boldsymbol{x}^k$ から見ると最急降下方向．</li>
 </ul>
 <p>$f(\boldsymbol{x})$ の関数形によっては更新則 (5) の方向に進んでも関数値が増加することもある．</p>
-<p>$\rightsquigarrow$ 学習率 $\alpha_k$ を</p>
-$$ \min \{f(\boldsymbol{x}^k + \alpha d(\boldsymbol{x}^k)) \, | \, \alpha &gt; 0\} \tag{6}$$<p>を実現する $\alpha$ が存在すればその値に設定する (直線探索)．</p>
+<p>$\rightsquigarrow$ 学習率 $\varepsilon_k$ を</p>
+$$ \min \{f(\boldsymbol{x}^k + \varepsilon d(\boldsymbol{x}^k)) \, | \, \varepsilon &gt; 0\} \tag{6}$$<p>を実現する $\varepsilon$ が存在すればその値に設定する (直線探索)．</p>
 <p>最急降下法のアルゴリズムを以下に示す．</p>
 <h3 id="Algorithm-(Steepest)">Algorithm (Steepest)<a class="anchor-link" href="#Algorithm-(Steepest)">&#182;</a></h3><h4 id="Input">Input<a class="anchor-link" href="#Input">&#182;</a></h4><ul>
 <li>$f$: 目的関数</li>
-<li>$\varepsilon$: 閾値
+<li>$\delta$: 閾値
 #### Output</li>
 <li>$\boldsymbol{x}^{*}$ の近似解 $\boldsymbol{x}^k$</li>
 </ul>
 <h4 id="%E5%8B%95%E4%BD%9C">&#21205;&#20316;<a class="anchor-link" href="#%E5%8B%95%E4%BD%9C">&#182;</a></h4><ol>
 <li>(初期化) 初期値 $\boldsymbol{x}^0$ を定める．$k \leftarrow 0$.</li>
-<li>(終了判定) $\|\boldsymbol{x}^{k + 1} - \boldsymbol{x}^k  \| &lt; \varepsilon$ であれば，$\boldsymbol{x}^k$ を出力して終了．</li>
-<li>(反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla f(\boldsymbol{x}^k)$. $\alpha_k \leftarrow$ 直線探索の近似解とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．</li>
+<li>(終了判定) $\|\boldsymbol{x}^{k + 1} - \boldsymbol{x}^k  \| &lt; \delta$ であれば，$\boldsymbol{x}^k$ を出力して終了．</li>
+<li>(反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla f(\boldsymbol{x}^k)$. $\varepsilon_k \leftarrow$ 直線探索の近似解とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．</li>
 </ol>
 <h3 id="Remark">Remark<a class="anchor-link" href="#Remark">&#182;</a></h3><ul>
 <li>$\nabla f$ を解析的に求めるのが困難な場合には自動微分等を用いる．</li>
 <li>最急降下法は，1次近似で最良の方向へ進む．</li>
-<li>$\alpha_k$ が十分に小さいとき，以下の ODE で表される (修正方程式)．
+<li>$\varepsilon_k$ が十分に小さいとき，以下の ODE で表される (修正方程式)．
   $$ \dot{\boldsymbol{x}} = -\nabla f(\boldsymbol{x}) $$</li>
 </ul>
 
@@ -14027,7 +14027,7 @@ $$ \min \{f(\boldsymbol{x}^k + \alpha d(\boldsymbol{x}^k)) \, | \, \alpha &gt; 0
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3 id="%E7%B7%9A%E5%BD%A2%E6%8E%A2%E7%B4%A2">&#32218;&#24418;&#25506;&#32034;<a class="anchor-link" href="#%E7%B7%9A%E5%BD%A2%E6%8E%A2%E7%B4%A2">&#182;</a></h3><p>線形探索として Armijo のルールを用いる．Armijo のルールは以下のような更新則である．</p>
 <p>$\beta, \gamma \in (0, \ 1)$ を選び，</p>
-$$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k) \leq \gamma \beta^{\ell_k} \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} d(\boldsymbol{x}^k) \tag{7}$$<p>を満たす最小の非負整数 $\ell_k$ を求め，$t_k = \beta^{\ell_k}$ とし，この $t_k$ を学習率 $\alpha_k$ とする．</p>
+$$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k) \leq \gamma \beta^{\ell_k} \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} d(\boldsymbol{x}^k) \tag{7}$$<p>を満たす最小の非負整数 $\ell_k$ を求め，$t_k = \beta^{\ell_k}$ とし，この $t_k$ を学習率 $\varepsilon_k$ とする．</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14238,10 +14238,10 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h3><p>$\alpha = 1$ として $d(\boldsymbol{x}^k)$ として</p>
+<h3 id="%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h3><p>$\varepsilon = 1$ として $d(\boldsymbol{x}^k)$ として</p>
 $$ d(\boldsymbol{x}^k) = - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k) \tag{8}$$<p>を選ぶ方法．$\nabla^2 f(\boldsymbol{x}^k)$ は $f$ の $\boldsymbol{x} = \boldsymbol{x}^k$ におけるヘッセ行列．正則性は仮定している．</p>
 <p>以下，アルゴリズムの形に記述する．</p>
-<h3 id="Algorithm-(Steepest)">Algorithm (Steepest)<a class="anchor-link" href="#Algorithm-(Steepest)">&#182;</a></h3><h4 id="Input">Input<a class="anchor-link" href="#Input">&#182;</a></h4><ul>
+<h3 id="Algorithm-(Newton)">Algorithm (Newton)<a class="anchor-link" href="#Algorithm-(Newton)">&#182;</a></h3><h4 id="Input">Input<a class="anchor-link" href="#Input">&#182;</a></h4><ul>
 <li>$f$: 目的関数</li>
 <li>$\varepsilon$: 閾値
 #### Output</li>
@@ -14250,7 +14250,7 @@ $$ d(\boldsymbol{x}^k) = - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbo
 <h4 id="%E5%8B%95%E4%BD%9C">&#21205;&#20316;<a class="anchor-link" href="#%E5%8B%95%E4%BD%9C">&#182;</a></h4><ol>
 <li>(初期化) 初期値 $\boldsymbol{x}^0$ を定める．$k \leftarrow 0$.</li>
 <li>(終了判定) $\|\boldsymbol{x}^{k + 1} - \boldsymbol{x}^k  \| &lt; \varepsilon$ であれば，$\boldsymbol{x}^k$ を出力して終了．</li>
-<li>(反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k)$, $\alpha_k \leftarrow 1$ とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．</li>
+<li>(反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k)$, $\varepsilon_k \leftarrow 1$ とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．</li>
 </ol>
 <h4 id="Remark">Remark<a class="anchor-link" href="#Remark">&#182;</a></h4><p>ニュートン法は2次の最適な方向へ進む．実際，Taylor 展開を考えると</p>
 $$ f(\boldsymbol{x}^k + \boldsymbol{d}) \approx f(\boldsymbol{x}^k) + \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} \boldsymbol{d} + \frac{1}{2} \boldsymbol{d}^{\mathrm{T}} \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} \tag{9}$$<p>を得る．$\boldsymbol{d}$ を変数ベクトルと見て，この関数の停留点条件を求めると，</p>
