@@ -38,7 +38,14 @@ class Test_function():
         f(x) = sum_{i = 1}^n x_i^2, -infty <= x_i <= infty, 1 <= i <= n,
         global minimum: f(0, ..., 0) = 0
         """
-        return sum(x*x)
+        return sum(x*x) 
+    
+    def distorted(self, x):
+        """
+        (This function is not listed in Wikipedia)
+        f(x) = 1/4 x^2 + y^2
+        """
+        return x[0]**2/4 + x[1]**2
     
     def rosenbrock(self, x):
         """

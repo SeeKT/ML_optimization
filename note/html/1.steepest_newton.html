@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>optimization_algorithm_1</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>1.steepest_newton</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -13971,63 +13971,9 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="%E6%9C%80%E9%81%A9%E5%8C%96%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0-(1)">&#26368;&#36969;&#21270;&#12450;&#12523;&#12468;&#12522;&#12474;&#12512; (1)<a class="anchor-link" href="#%E6%9C%80%E9%81%A9%E5%8C%96%E3%82%A2%E3%83%AB%E3%82%B4%E3%83%AA%E3%82%BA%E3%83%A0-(1)">&#182;</a></h1><p>ここでは，非線形最適化問題を解く代表的なアルゴリズムである最急降下法とニュートン法についてまとめる．[1]を参考にした．</p>
-<p>[1]: 茨木, <a href="https://www.kyoritsu-pub.co.jp/kenpon/bookDetail/9784320015654">最適化の数学</a>, 共立出版,2011.</p>
-<h2 id="%E8%80%83%E3%81%88%E3%82%8B%E5%95%8F%E9%A1%8C">&#32771;&#12360;&#12427;&#21839;&#38988;<a class="anchor-link" href="#%E8%80%83%E3%81%88%E3%82%8B%E5%95%8F%E9%A1%8C">&#182;</a></h2><p>機械学習では，しばしば以下のような制約なしの最適化問題を解く．</p>
-$$ \underset{\boldsymbol{x}}{\text{minimize}} \ \ f(\boldsymbol{x}) \ \ \text{subject to} \ \ \boldsymbol{x} \in S \subset \mathbb{R}^N.  \tag{1}$$<p>ここで，$f: \mathbb{R^N} \to \mathbb{R}$ とし，適当な微分可能性を仮定する．例えば，損失を最小にする重みの学習などがこのような問題で表される．</p>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="%E8%A7%A3%E6%B3%95">&#35299;&#27861;<a class="anchor-link" href="#%E8%A7%A3%E6%B3%95">&#182;</a></h2><p>点 $\boldsymbol{x}^{*}$ の1次の最適性必要条件は停留点であること，つまり，</p>
-$$ \nabla f(\boldsymbol{x}^{*}) = 0 \tag{2}$$<p>である．非線形関数 $f$ に対して， (2) を直接解くのは一般に困難である．</p>
-<p>$\rightsquigarrow$ 計算を繰り返すことで $\boldsymbol{x}^{*}$ に収束する点列 $\{ \boldsymbol{x}^k \}$ を生成し， $\boldsymbol{x}^{*}$ に十分近くなったと判断されたところで計算を終え，その時点の $\boldsymbol{x}^k$ を $\boldsymbol{x}^{*}$ の近似解として出力するのが普通．</p>
-<p>現在の点 $\boldsymbol{x}^k$ において，ベクトル $d(\boldsymbol{x}^k) \in \mathbb{R}^N$ が</p>
-$$ \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} d(\boldsymbol{x}^k) &lt; 0 \tag{3}$$<p>を満たすならば， $\nabla f(\boldsymbol{x}^k)$ ($f(\boldsymbol{x}^k)$ からの最急増加方向) と $d(\boldsymbol{x}^k)$ は鈍角をなす．</p>
-<p>$\rightsquigarrow$ $d(\boldsymbol{x}^k)$ は $f$ の降下方向を示す．</p>
-<p>よって，降下方向ベクトル $d(\boldsymbol{x}^k)$ を見つけ，</p>
-$$ \boldsymbol{x}^{k + 1} = \boldsymbol{x}^k + \varepsilon_k d(\boldsymbol{x}^k) \tag{4}$$<p>という修正を行うという方針をとる．$\varepsilon_k$ はステップ幅または<strong>学習率</strong>と呼ばれる実数である．</p>
-<p>$d(\boldsymbol{x}^k)$ や $\varepsilon_k$ をどのように見つけるかによってアルゴリズムが決まる．</p>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95-(Steepest-descent-/-Gradient-descent)">&#26368;&#24613;&#38477;&#19979;&#27861; (Steepest descent / Gradient descent)<a class="anchor-link" href="#%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95-(Steepest-descent-/-Gradient-descent)">&#182;</a></h2><p>$d(\boldsymbol{x}^k)$ として，勾配ベクトル $\nabla f(\boldsymbol{x}^k)$ の反対方向</p>
-$$ d(\boldsymbol{x}^k) = - \nabla f(\boldsymbol{x}^k) \tag{5}$$<p>を用いるアルゴリズム．1次の方法である．</p>
-<ul>
-<li>$d(\boldsymbol{x}^k)$ は $\boldsymbol{x}^k$ から見ると最急降下方向．</li>
-</ul>
-<p>$f(\boldsymbol{x})$ の関数形によっては更新則 (5) の方向に進んでも関数値が増加することもある．</p>
-<p>$\rightsquigarrow$ 学習率 $\varepsilon_k$ を</p>
-$$ \min \{f(\boldsymbol{x}^k + \varepsilon d(\boldsymbol{x}^k)) \, | \, \varepsilon &gt; 0\} \tag{6}$$<p>を実現する $\varepsilon$ が存在すればその値に設定する (直線探索)．</p>
-<p>最急降下法のアルゴリズムを以下に示す．</p>
-<h3 id="Algorithm-(Steepest)">Algorithm (Steepest)<a class="anchor-link" href="#Algorithm-(Steepest)">&#182;</a></h3><h4 id="Input">Input<a class="anchor-link" href="#Input">&#182;</a></h4><ul>
-<li>$f$: 目的関数</li>
-<li>$\delta$: 閾値
-#### Output</li>
-<li>$\boldsymbol{x}^{*}$ の近似解 $\boldsymbol{x}^k$</li>
-</ul>
-<h4 id="%E5%8B%95%E4%BD%9C">&#21205;&#20316;<a class="anchor-link" href="#%E5%8B%95%E4%BD%9C">&#182;</a></h4><ol>
-<li>(初期化) 初期値 $\boldsymbol{x}^0$ を定める．$k \leftarrow 0$.</li>
-<li>(終了判定) $\|\boldsymbol{x}^{k + 1} - \boldsymbol{x}^k  \| &lt; \delta$ であれば，$\boldsymbol{x}^k$ を出力して終了．</li>
-<li>(反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla f(\boldsymbol{x}^k)$. $\varepsilon_k \leftarrow$ 直線探索の近似解とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．</li>
-</ol>
-<h3 id="Remark">Remark<a class="anchor-link" href="#Remark">&#182;</a></h3><ul>
-<li>$\nabla f$ を解析的に求めるのが困難な場合には自動微分等を用いる．</li>
-<li>最急降下法は，1次近似で最良の方向へ進む．</li>
-<li>$\varepsilon_k$ が十分に小さいとき，以下の ODE で表される (修正方程式)．
-  $$ \dot{\boldsymbol{x}} = -\nabla f(\boldsymbol{x}) $$</li>
-</ul>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="%E7%B7%9A%E5%BD%A2%E6%8E%A2%E7%B4%A2">&#32218;&#24418;&#25506;&#32034;<a class="anchor-link" href="#%E7%B7%9A%E5%BD%A2%E6%8E%A2%E7%B4%A2">&#182;</a></h3><p>線形探索として Armijo のルールを用いる．Armijo のルールは以下のような更新則である．</p>
-<p>$\beta, \gamma \in (0, \ 1)$ を選び，</p>
-$$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k) \leq \gamma \beta^{\ell_k} \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} d(\boldsymbol{x}^k) \tag{7}$$<p>を満たす最小の非負整数 $\ell_k$ を求め，$t_k = \beta^{\ell_k}$ とし，この $t_k$ を学習率 $\varepsilon_k$ とする．</p>
+<h1 id="%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%A8%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#26368;&#24613;&#38477;&#19979;&#27861;&#12392;&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%A8%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h1><p>機械学習を意識すると，データが given，モデルを構築し，損失関数およびコスト関数を定義するというようにすべきだが，今回は artificial な関数に対して勾配法を用いるというようにする．</p>
+<p>また，勾配を求める処理も自動微分を用いて行っている．</p>
+<p>ここでは，最急降下法とニュートン法を実装した．</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14040,7 +13986,8 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 <span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">lib.lib</span> <span class="kn">import</span> <span class="n">Test_function</span>
 <span class="kn">from</span> <span class="nn">lib.plot</span> <span class="kn">import</span> <span class="n">Plot_func</span>
-<span class="kn">from</span> <span class="nn">lib.optimization_methods</span> <span class="kn">import</span> <span class="n">Optimization_methods</span>
+<span class="kn">from</span> <span class="nn">lib.steepest_descent</span> <span class="kn">import</span> <span class="n">Steepest</span>
+<span class="kn">from</span> <span class="nn">lib.newton</span> <span class="kn">import</span> <span class="n">Newton</span>
 <span class="c1">##############################</span>
 </pre></div>
 
@@ -14058,7 +14005,8 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### instance of the class #####</span>
 <span class="n">test</span> <span class="o">=</span> <span class="n">Test_function</span><span class="p">()</span>
 <span class="n">pf</span> <span class="o">=</span> <span class="n">Plot_func</span><span class="p">()</span>
-<span class="n">om</span> <span class="o">=</span> <span class="n">Optimization_methods</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">stp</span> <span class="o">=</span> <span class="n">Steepest</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">nt</span> <span class="o">=</span> <span class="n">Newton</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 <span class="c1">#################################</span>
 </pre></div>
 
@@ -14075,8 +14023,8 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
-<span class="n">sphere_steepest_x</span><span class="p">,</span> <span class="n">itr_sphere_steepest</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">sphere</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
+<span class="n">distort_steepest_x</span><span class="p">,</span> <span class="n">itr_distort_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">distorted</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">####################################</span>
 </pre></div>
 
@@ -14097,7 +14045,7 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 60
+<pre>Converged. #Iter = 113
 </pre>
 </div>
 </div>
@@ -14115,8 +14063,8 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">sphere</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">sphere_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">sphere_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_sphere_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;sphere&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
+    <span class="n">x_val</span><span class="o">=</span><span class="n">distort_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">distort_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_distort_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;distorted&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14127,8 +14075,13 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/sphere/contour_sphere_steepest.gif?raw=true"></p>
+<p><img src="./fig/distorted/contour_distorted_steepest.gif"></p>
 
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95">&#26368;&#24613;&#38477;&#19979;&#27861;<a class="anchor-link" href="#%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95">&#182;</a></h2>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
@@ -14138,7 +14091,7 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
-<span class="n">ackley_steepest_x</span><span class="p">,</span> <span class="n">itr_ackley_steepest</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+<span class="n">ackley_steepest_x</span><span class="p">,</span> <span class="n">itr_ackley_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">####################################</span>
 </pre></div>
@@ -14160,7 +14113,7 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 20
+<pre>Converged. #Iter = 14
 </pre>
 </div>
 </div>
@@ -14190,7 +14143,7 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/ackley/contour_ackley_steepest.gif?raw=true"></p>
+<p><img src="./fig/ackley/contour_ackley_steepest.gif"></p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14200,8 +14153,8 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">easom_steepest_x</span><span class="p">,</span> <span class="n">itr_easom_steepest</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
+<span class="n">easom_steepest_x</span><span class="p">,</span> <span class="n">itr_easom_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">####################################</span>
 </pre></div>
@@ -14217,7 +14170,7 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
     <span class="n">x_val</span><span class="o">=</span><span class="n">easom_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">easom_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
@@ -14232,31 +14185,13 @@ $$ f(\boldsymbol{x}^k + \beta^{\ell_k} d(\boldsymbol{x}^k)) - f(\boldsymbol{x}^k
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/easom/contour_easom_steepest.gif?raw=true"></p>
+<p><img src="./fig/easom/contour_easom_steepest.gif"></p>
 
 </div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h3><p>$\varepsilon = 1$ として $d(\boldsymbol{x}^k)$ として</p>
-$$ d(\boldsymbol{x}^k) = - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k) \tag{8}$$<p>を選ぶ方法．$\nabla^2 f(\boldsymbol{x}^k)$ は $f$ の $\boldsymbol{x} = \boldsymbol{x}^k$ におけるヘッセ行列．正則性は仮定している．</p>
-<p>以下，アルゴリズムの形に記述する．</p>
-<h3 id="Algorithm-(Newton)">Algorithm (Newton)<a class="anchor-link" href="#Algorithm-(Newton)">&#182;</a></h3><h4 id="Input">Input<a class="anchor-link" href="#Input">&#182;</a></h4><ul>
-<li>$f$: 目的関数</li>
-<li>$\varepsilon$: 閾値
-#### Output</li>
-<li>$\boldsymbol{x}^{*}$ の近似解 $\boldsymbol{x}^k$</li>
-</ul>
-<h4 id="%E5%8B%95%E4%BD%9C">&#21205;&#20316;<a class="anchor-link" href="#%E5%8B%95%E4%BD%9C">&#182;</a></h4><ol>
-<li>(初期化) 初期値 $\boldsymbol{x}^0$ を定める．$k \leftarrow 0$.</li>
-<li>(終了判定) $\|\boldsymbol{x}^{k + 1} - \boldsymbol{x}^k  \| &lt; \varepsilon$ であれば，$\boldsymbol{x}^k$ を出力して終了．</li>
-<li>(反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k)$, $\varepsilon_k \leftarrow 1$ とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．</li>
-</ol>
-<h4 id="Remark">Remark<a class="anchor-link" href="#Remark">&#182;</a></h4><p>ニュートン法は2次の最適な方向へ進む．実際，Taylor 展開を考えると</p>
-$$ f(\boldsymbol{x}^k + \boldsymbol{d}) \approx f(\boldsymbol{x}^k) + \nabla f(\boldsymbol{x}^k)^{\mathrm{T}} \boldsymbol{d} + \frac{1}{2} \boldsymbol{d}^{\mathrm{T}} \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} \tag{9}$$<p>を得る．$\boldsymbol{d}$ を変数ベクトルと見て，この関数の停留点条件を求めると，</p>
-$$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,$$<p>つまり，(8)を得る．</p>
-<p>ニュートン法は収束が非常に早いが，高次元になると計算が困難になるので，実用的ではない．</p>
-
+<h2 id="%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h2>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
@@ -14266,8 +14201,8 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
-<span class="n">sphere_newton_x</span><span class="p">,</span> <span class="n">itr_sphere_newton</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">sphere</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
+<span class="n">distort_newton_x</span><span class="p">,</span> <span class="n">itr_distort_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
+    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">distorted</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">##########################</span>
 </pre></div>
 
@@ -14306,8 +14241,8 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">sphere</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">sphere_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">sphere_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_sphere_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;sphere&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
+    <span class="n">x_val</span><span class="o">=</span><span class="n">distort_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">distort_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_distort_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;distorted&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14318,7 +14253,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/sphere/contour_sphere_newton.gif?raw=true"></p>
+<p><img src="./fig/distorted/contour_distorted_newton.gif"></p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14329,7 +14264,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
-<span class="n">ackley_newton_x</span><span class="p">,</span> <span class="n">itr_ackley_newton</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
+<span class="n">ackley_newton_x</span><span class="p">,</span> <span class="n">itr_ackley_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">##########################</span>
 </pre></div>
@@ -14351,7 +14286,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 4
+<pre>Converged. #Iter = 3
 </pre>
 </div>
 </div>
@@ -14381,7 +14316,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/ackley/contour_ackley_newton.gif?raw=true"></p>
+<p><img src="./fig/ackley/contour_ackley_newton.gif"></p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14391,8 +14326,8 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">easom_newton_x</span><span class="p">,</span> <span class="n">itr_easom_newton</span> <span class="o">=</span> <span class="n">om</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
+<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
+<span class="n">easom_newton_x</span><span class="p">,</span> <span class="n">itr_easom_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">##########################</span>
 </pre></div>
@@ -14414,7 +14349,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 22
+<pre>Converged. #Iter = 3
 </pre>
 </div>
 </div>
@@ -14429,7 +14364,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
     <span class="n">x_val</span><span class="o">=</span><span class="n">easom_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">easom_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
@@ -14444,7 +14379,7 @@ $$ \nabla f(\boldsymbol{x}^k) + \nabla^2 f(\boldsymbol{x}^k) \boldsymbol{d} = 0,
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/easom/contour_easom_newton.gif?raw=true"></p>
+<p><img src="./fig/easom/contour_easom_newton.gif"></p>
 
 </div>
 </div>

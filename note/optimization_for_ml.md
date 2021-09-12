@@ -75,9 +75,10 @@ SGDは deep learning の文脈の外でも重要である．
 SGD およびその改良版は，機械学習で一般的に，特に deep learning で用いられる最適化手法である．
 Data-generating distribution からの i.i.d sampling によって $m$ examples の minibatch の gradient の平均をとると，gradient の不偏推定量を得ることができる([^1], Chapter 8.1.3)．
 
-![png](./fig/algorithm_list/2.1_SGD.png "SGDのアルゴリズム")
+![png](https://github.com/SeeKT/ML_optimization/blob/master/note/fig/algorithm_list/2.1_SGD.png?raw=true "SGDのアルゴリズム")
 
-Algorithm 2.1 に SGD の更新則を示す (1節の $m^{\prime}$ を $m$ と思う) ．
+Algorithm 2.1 に SGD の更新則を示す (1節の $m^{\prime}$ を $m$ と思う)．
+アルゴリズムを見るとわかるが，steepest descent との違いは勾配を求めるときにすべてのデータを用いるのではなく，ランダムに選んだ $m$ 個の examples からなる minibatch を用いるという点である．
 
 SGD において重要なアルゴリズムは，learning rate である．実用的には，徐々に learning rate を減らしていくことが必要であるので，iteration $k$ における learning rate を $\varepsilon_k$ と書いている．
 
