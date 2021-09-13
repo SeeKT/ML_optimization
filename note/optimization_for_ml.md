@@ -126,3 +126,74 @@ $\rightsquigarrow$ training examples が増加しても収束する．
 
 - SGD を凸計画問題に適用した場合，$k$ 回の iteration の後の excess error は，$O(1/\sqrt{k})$．強凸の場合，$O(1/k)$.
     - この下限は，extra conditions を仮定しないと改善されない．
+
+<div style="page-break-before:always"></div>
+
+### 2.2 Momentum SGD
+SGD は収束が遅かったり，振動したりといった問題が起こりうる．
+
+- Hessian matrix の poor condition
+- stochastic gradient の分散
+
+$\rightsquigarrow$ モーメンタム法は，過去の勾配の情報を割り引いて取り入れることで振動を抑制．学習の高速化を図る．
+
+モーメンタム法
+
+- 物理のアナロジーに由来．
+    - パラメータ空間を粒子が negative gradient を力として運動している．
+
+以下の記号を導入．
+
+- $\boldsymbol{v}$: 速度
+- $\alpha \in [0, \ 1)$: 過去の勾配の寄与が指数関数的に減衰する速さを決定するハイパーパラメータ
+
+![png](./fig/algorithm_list/2.2_momentum.png "Momentum の更新則")
+
+Algorithm 2.2 にモーメンタムの更新則を示す．
+
+- $\boldsymbol{v}$ は過去の勾配 $\boldsymbol{g}$ の累積になっている．
+- $\alpha$ は $\varepsilon$ と比べてどのくらい過去の勾配を重視するかを決める．
+- ステップの幅は，勾配の大きさと一連の勾配がどのように整列しているかに依る．
+    - 多くの勾配が同じ方向を向いていれば，step size は大きい．
+- モーメンタム法では常に勾配 $\boldsymbol{g}$ を観測し，terminal velocity に達するまで $-\boldsymbol{g}$ 方向に加速し続ける．Terminal velocity に達したときのステップ幅は，
+$$ \frac{\varepsilon \|\boldsymbol{g} \|}{1 - \alpha} \tag{2.8}$$
+
+- $\alpha = 0.5, 0.9, 0.99$ などがよく使われる．$\alpha$ を adaptive にすることは学習率の調整ほど重要ではない．
+- $\varepsilon$ は $0.01$ などにしているのが多そう．
+
+$n$ 回目の更新時における $\boldsymbol{v}$, $\boldsymbol{\theta}$ を，$\boldsymbol{v}_n$, $\boldsymbol{\theta}_n$ と書く．(2.7)の更新式は $\boldsymbol{v}$ が含まれない形で書き直すことができることに注意する．
+
+$$ \begin{cases} \boldsymbol{\theta}_{n + 1} - \boldsymbol{\theta}_n = \boldsymbol{v}_n \\ \boldsymbol{v}_n = \alpha \boldsymbol{v}_{n - 1} - \varepsilon \boldsymbol{g}  \end{cases} \Longleftrightarrow \boldsymbol{\theta}_{n + 1} - \boldsymbol{\theta}_n = - \varepsilon \boldsymbol{g} + \alpha (\boldsymbol{\theta}_n - \boldsymbol{\theta}_{n - 1}) \tag{2.9}$$
+
+ここで，モーメンタム法の物理的なアナロジーについて簡単にまとめる．
+
+質量 $m$ の粒子の時刻 $t$ での位置が $\boldsymbol{\theta}(t)$ で与えられるとし，粒子に対して速度に比例する摩擦力 ($\mu$を比例定数とする) と位置エネルギー $E(\boldsymbol{\theta})$ からの力が作用しているとする．このとき，ニュートンの運動方程式は，
+
+$$ m \frac{d^2 \boldsymbol{\theta}}{dt^2} + \mu \frac{d \boldsymbol{\theta}}{dt} = - \nabla_{\boldsymbol{\theta}} E(\boldsymbol{\theta}) \tag{2.10}$$
+
+となる．オイラー法を用いると，以下の離散時間のダイナミクスを得る．
+
+$$ m \frac{\boldsymbol{\theta}_{n + 1} - 2\boldsymbol{\theta}_n + \boldsymbol{\theta}_{n - 1} }{(\Delta t)^2} + \mu \frac{\boldsymbol{\theta}_{n} - \boldsymbol{\theta}_{n - 1}}{\Delta t} = - \nabla_{\boldsymbol{\theta}} E(\boldsymbol{\theta}) \tag{2.11}$$
+
+(2.11) を整理すると，
+
+$$ \boldsymbol{\theta}_{n + 1} - \boldsymbol{\theta}_n = - \frac{(\Delta t)^2}{m + \mu \Delta t} \nabla_{\boldsymbol{\theta}} E(\boldsymbol{\theta}) + \frac{m}{m + \mu \Delta t} (\boldsymbol{\theta}_{n} - \boldsymbol{\theta}_{n - 1}) \tag{2.12}$$
+
+を得る．
+
+$$ \varepsilon \coloneqq \frac{(\Delta t)^2}{m + \mu \Delta t}, \ \ \alpha \coloneqq \frac{m}{m + \mu \Delta t} \tag{2.13}$$
+
+とすると，(2.9) に一致する．
+
+つまり，モーメンタム法の更新は $m > 0$ の質量を持つ粒子が摩擦と位置エネルギーによってパラメータ空間を運動しているときの位置の変化であるというように解釈できる．
+
+<div style="page-break-before:always"></div>
+
+### 2.3 Nesterov Momentum
+Momentum SGD の収束への加速を早めるために，現在の速度が適用された後の $\boldsymbol{\theta}$ に関して勾配を評価する方法．
+
+![png](./fig/algorithm_list/2.3_nag.png "NAG の更新則")
+
+Algorithm 2.3 に Nesterov momentum の更新則を示す．
+
+SGD の場合，収束率は改善されない[^1]．
