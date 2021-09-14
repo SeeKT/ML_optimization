@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>1.steepest_newton</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>4.nag</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -13971,9 +13971,7 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%A8%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#26368;&#24613;&#38477;&#19979;&#27861;&#12392;&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95%E3%81%A8%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h1><p>機械学習を意識すると，データが given，モデルを構築し，損失関数およびコスト関数を定義するというようにすべきだが，今回は artificial な関数に対して勾配法を用いるというようにする．</p>
-<p>また，勾配を求める処理も自動微分を用いて行っている．</p>
-<p>ここでは，最急降下法とニュートン法を実装した．</p>
+<h1 id="NAG">NAG<a class="anchor-link" href="#NAG">&#182;</a></h1><p>Artificial な関数に対して NAG を用いる．</p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -13986,8 +13984,7 @@ a.anchor-link {
 <span class="kn">import</span> <span class="nn">autograd.numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">lib.lib</span> <span class="kn">import</span> <span class="n">Test_function</span>
 <span class="kn">from</span> <span class="nn">lib.plot</span> <span class="kn">import</span> <span class="n">Plot_func</span>
-<span class="kn">from</span> <span class="nn">lib.steepest_descent</span> <span class="kn">import</span> <span class="n">Steepest</span>
-<span class="kn">from</span> <span class="nn">lib.newton</span> <span class="kn">import</span> <span class="n">Newton</span>
+<span class="kn">from</span> <span class="nn">lib.nag</span> <span class="kn">import</span> <span class="n">NAG</span>
 <span class="c1">##############################</span>
 </pre></div>
 
@@ -14005,8 +14002,7 @@ a.anchor-link {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### instance of the class #####</span>
 <span class="n">test</span> <span class="o">=</span> <span class="n">Test_function</span><span class="p">()</span>
 <span class="n">pf</span> <span class="o">=</span> <span class="n">Plot_func</span><span class="p">()</span>
-<span class="n">stp</span> <span class="o">=</span> <span class="n">Steepest</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
-<span class="n">nt</span> <span class="o">=</span> <span class="n">Newton</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+<span class="n">nag</span> <span class="o">=</span> <span class="n">NAG</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 <span class="c1">#################################</span>
 </pre></div>
 
@@ -14015,22 +14011,17 @@ a.anchor-link {
 </div>
 </div>
 
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95">&#26368;&#24613;&#38477;&#19979;&#27861;<a class="anchor-link" href="#%E6%9C%80%E6%80%A5%E9%99%8D%E4%B8%8B%E6%B3%95">&#182;</a></h2>
-</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute NAG #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
-<span class="n">distort_steepest_x</span><span class="p">,</span> <span class="n">itr_distort_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+<span class="n">distort_nag_x</span><span class="p">,</span> <span class="n">itr_distort_nag</span> <span class="o">=</span> <span class="n">nag</span><span class="o">.</span><span class="n">nag</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">distorted</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">####################################</span>
+<span class="c1">#######################</span>
 </pre></div>
 
      </div>
@@ -14050,7 +14041,7 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 113
+<pre>Converged. #Iter = 70
 </pre>
 </div>
 </div>
@@ -14068,8 +14059,8 @@ a.anchor-link {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">distorted</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">distort_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">distort_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_distort_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;distorted&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
+    <span class="n">x_val</span><span class="o">=</span><span class="n">distort_nag_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">distort_nag_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_distort_nag</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;distorted&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;nag&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14080,7 +14071,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/distorted/contour_distorted_steepest.gif?raw=true"></p>
+<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/distorted/contour_distorted_nag.gif?raw=true"></p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
@@ -14089,11 +14080,11 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute NAG #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
-<span class="n">ackley_steepest_x</span><span class="p">,</span> <span class="n">itr_ackley_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+<span class="n">ackley_nag_x</span><span class="p">,</span> <span class="n">itr_ackley_nag</span> <span class="o">=</span> <span class="n">nag</span><span class="o">.</span><span class="n">nag</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">####################################</span>
+<span class="c1">#######################</span>
 </pre></div>
 
      </div>
@@ -14113,7 +14104,7 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 10
+<pre>Converged. #Iter = 24
 </pre>
 </div>
 </div>
@@ -14131,8 +14122,8 @@ a.anchor-link {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">ackley_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">ackley_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_ackley_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;ackley&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
+    <span class="n">x_val</span><span class="o">=</span><span class="n">ackley_nag_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">ackley_nag_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_ackley_nag</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;ackley&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;nag&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14143,7 +14134,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/ackley/contour_ackley_steepest.gif?raw=true"></p>
+<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/ackley/contour_ackley_nag.gif?raw=true"></p>
 
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14152,11 +14143,11 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute NAG #####</span>
 <span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">matyas_steepest_x</span><span class="p">,</span> <span class="n">itr_matyas_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+<span class="n">matyas_nag_x</span><span class="p">,</span> <span class="n">itr_matyas_nag</span> <span class="o">=</span> <span class="n">nag</span><span class="o">.</span><span class="n">nag</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">####################################</span>
+<span class="c1">#######################</span>
 </pre></div>
 
      </div>
@@ -14173,8 +14164,8 @@ a.anchor-link {
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">matyas_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">matyas_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_matyas_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;matyas&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
+    <span class="n">x_val</span><span class="o">=</span><span class="n">matyas_nag_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">matyas_nag_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_matyas_nag</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;matyas&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;nag&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14185,201 +14176,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/matyas/contour_matyas_steepest.gif?raw=true"></p>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#12491;&#12517;&#12540;&#12488;&#12531;&#27861;<a class="anchor-link" href="#%E3%83%8B%E3%83%A5%E3%83%BC%E3%83%88%E3%83%B3%E6%B3%95">&#182;</a></h2>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
-<span class="n">distort_newton_x</span><span class="p">,</span> <span class="n">itr_distort_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">distorted</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">##########################</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 2
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
-<span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">distorted</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">distort_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">distort_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_distort_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;distorted&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/distorted/contour_distorted_newton.gif?raw=true"></p>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
-<span class="n">ackley_newton_x</span><span class="p">,</span> <span class="n">itr_ackley_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">##########################</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 3
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
-<span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">ackley_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">ackley_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_ackley_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;ackley&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/ackley/contour_ackley_newton.gif?raw=true"></p>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
-<span class="n">matyas_newton_x</span><span class="p">,</span> <span class="n">itr_matyas_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">##########################</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 2
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
-<span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">matyas_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">matyas_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_matyas_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;matyas&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/matyas/contour_matyas_newton.gif?raw=true"></p>
+<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/matyas/contour_matyas_nag.gif?raw=true"></p>
 
 </div>
 </div>

@@ -165,7 +165,9 @@ $n$ 回目の更新時における $\boldsymbol{v}$, $\boldsymbol{\theta}$ を�
 
 $$ \begin{cases} \boldsymbol{\theta}_{n + 1} - \boldsymbol{\theta}_n = \boldsymbol{v}_n \\ \boldsymbol{v}_n = \alpha \boldsymbol{v}_{n - 1} - \varepsilon \boldsymbol{g}  \end{cases} \Longleftrightarrow \boldsymbol{\theta}_{n + 1} - \boldsymbol{\theta}_n = - \varepsilon \boldsymbol{g} + \alpha (\boldsymbol{\theta}_n - \boldsymbol{\theta}_{n - 1}) \tag{2.9}$$
 
-ここで，モーメンタム法の物理的なアナロジーについて簡単にまとめる．
+ここで，モーメンタム法の物理的なアナロジーについて簡単にまとめる[^2]．
+
+[^2]: N. Qian, "[On the momentum term in gradient descent learning algorithms](https://www.sciencedirect.com/science/article/pii/S0893608098001166?casa_token=J86x_jRtjt8AAAAA:JVxWbRreQ4XOoHda4hKu5OxvEbB_FWPquZqvXR-qEEf8ycOLSH_5rggm9rPESVpk2qxTt0yfBeO-)," Neural Networks, vol. 12, no. 1, pp. 145-151, 1999.
 
 質量 $m$ の粒子の時刻 $t$ での位置が $\boldsymbol{\theta}(t)$ で与えられるとし，粒子に対して速度に比例する摩擦力 ($\mu$を比例定数とする) と位置エネルギー $E(\boldsymbol{\theta})$ からの力が作用しているとする．このとき，ニュートンの運動方程式は，
 
@@ -197,3 +199,21 @@ Momentum SGD の収束への加速を早めるために，現在の速度が適�
 Algorithm 2.3 に Nesterov momentum の更新則を示す．
 
 SGD の場合，収束率は改善されない[^1]．
+
+<div style="page-break-before:always"></div>
+
+## 3. 実用的なアルゴリズム
+### 3.1 AdaGrad
+深層学習などに用いられる高次元の問題では，勾配が急な方向へは即座に収束するが，勾配が緩やかな方向の収束が遅いということが起こりうる．また，Momentum では極値に近づいても極値付近で振動し続けるといったことが起こりうる．
+
+AdaGradは，過去の勾配の情報に基づいて勾配を各次元ごとに調整しよう，という方法である[^3]．具体的には，勾配の全ての履歴の2乗和の平方根に反比例するようにスケーリングすることで，パラメータの学習率を次元ごとに独立に適合させる，というようなもの．
+$\rightsquigarrow$ 勾配が大きい方向は学習率を素早く低下させる．勾配が小さい方向は学習率を緩やかに低下させる．
+
+[^3]: J. Duchi, et al., "[Adaptive Subgradient Methods for Online Learning and Stochastic Optimization](https://jmlr.org/papers/v12/duchi11a.html)," Journal of Machine Learning Research, vol. 12, no. 61, pp. 2121-2159, 2011.
+
+![png](./fig/algorithm_list/3.1_adagrad.png "AdaGradのアルゴリズム")
+
+Algorithm 3.1 に AdaGrad の更新則を示す．$\odot$ は，Hadamard 積を表す．
+
+- AdaGradは deep では上手くいかないこともある．
+    - 学習初期に過度に学習率を低下させてしまう．

@@ -38,7 +38,7 @@ class NAG(Base_optimization):
         """
         return v 
     
-    def getrate_nag(self, func, x, i, v):
+    def getrate_nag(self, func, x, i, d):
         """
         Compute learning rate
         """

@@ -58,7 +58,7 @@ class Base_optimization():
 
         Input:
             func: objective function, func(x)
-            getv: the function to get velocity, getv(function, x, v), if not considered, return 0.
+            getv: the function to get velocity etc., getv(function, x, v), if not considered, return 0.
             getupd: the function to get update vector, getupd(function, x, v)
             getrate: the function to get learning rate, getrate(func, curx, d)
             xinit: the initial value of x
@@ -71,7 +71,7 @@ class Base_optimization():
         ##### iteration #####
         for i in range(1, self.maxiter):
             curx = x_lst[-1]            # current x
-            v = getv(func, curx, v)     # get velocity
+            v = getv(func, curx, v)     # get velocity etc.
             d = getupd(func, curx, v)   # update vector
             eps = getrate(func, curx, i, d)  # learning rate
             newx = self.update_gradient(curx, eps, d)
