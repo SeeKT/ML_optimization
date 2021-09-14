@@ -14090,7 +14090,7 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
+<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
 <span class="n">ackley_steepest_x</span><span class="p">,</span> <span class="n">itr_ackley_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">####################################</span>
@@ -14113,7 +14113,7 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 14
+<pre>Converged. #Iter = 10
 </pre>
 </div>
 </div>
@@ -14153,9 +14153,9 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
-<span class="n">easom_steepest_x</span><span class="p">,</span> <span class="n">itr_easom_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
+<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">matyas_steepest_x</span><span class="p">,</span> <span class="n">itr_matyas_steepest</span> <span class="o">=</span> <span class="n">stp</span><span class="o">.</span><span class="n">steepest_descent</span><span class="p">(</span>
+    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">####################################</span>
 </pre></div>
 
@@ -14170,11 +14170,11 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">easom_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">easom_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_easom_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;easom&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
+    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
+    <span class="n">x_val</span><span class="o">=</span><span class="n">matyas_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">matyas_steepest_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_matyas_steepest</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;matyas&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;steepest&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14185,7 +14185,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/easom/contour_easom_steepest.gif?raw=true"></p>
+<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/matyas/contour_matyas_steepest.gif?raw=true"></p>
 
 </div>
 </div>
@@ -14263,7 +14263,7 @@ a.anchor-link {
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
+<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">])</span>
 <span class="n">ackley_newton_x</span><span class="p">,</span> <span class="n">itr_ackley_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
     <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">ackley</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
 <span class="c1">##########################</span>
@@ -14325,11 +14325,11 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute Newton #####</span>
-<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">])</span>
-<span class="n">easom_newton_x</span><span class="p">,</span> <span class="n">itr_easom_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
-<span class="c1">##########################</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">##### execute steepest descent #####</span>
+<span class="n">xinit</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">matyas_newton_x</span><span class="p">,</span> <span class="n">itr_matyas_newton</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">newton</span><span class="p">(</span>
+    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">xinit</span><span class="o">=</span><span class="n">xinit</span><span class="p">)</span>
+<span class="c1">####################################</span>
 </pre></div>
 
      </div>
@@ -14349,7 +14349,7 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Converged. #Iter = 3
+<pre>Converged. #Iter = 2
 </pre>
 </div>
 </div>
@@ -14364,11 +14364,11 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">x_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">);</span> <span class="n">y_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">2.25</span><span class="p">,</span> <span class="mi">51</span><span class="p">)</span>
 <span class="n">pf</span><span class="o">.</span><span class="n">plot_contour</span><span class="p">(</span>
-    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">easom</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
-    <span class="n">x_val</span><span class="o">=</span><span class="n">easom_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">easom_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
-    <span class="n">itr</span><span class="o">=</span><span class="n">itr_easom_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;easom&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
+    <span class="n">func</span><span class="o">=</span><span class="n">test</span><span class="o">.</span><span class="n">matyas</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="n">x_range</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="n">y_range</span><span class="p">,</span> 
+    <span class="n">x_val</span><span class="o">=</span><span class="n">matyas_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_val</span><span class="o">=</span><span class="n">matyas_newton_x</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> 
+    <span class="n">itr</span><span class="o">=</span><span class="n">itr_matyas_newton</span><span class="p">,</span> <span class="n">func_name</span><span class="o">=</span><span class="s2">&quot;matyas&quot;</span><span class="p">,</span> <span class="n">method_name</span><span class="o">=</span><span class="s2">&quot;newton&quot;</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -14379,7 +14379,7 @@ a.anchor-link {
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/easom/contour_easom_newton.gif?raw=true"></p>
+<p><img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/matyas/contour_matyas_newton.gif?raw=true"></p>
 
 </div>
 </div>
