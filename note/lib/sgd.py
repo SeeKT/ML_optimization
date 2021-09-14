@@ -13,7 +13,14 @@ class Stochastic_gradient(Base_optimization):
         self.eps_tau = eps_tau 
         self.tau = tau 
     
-    def getupd_sgd(self, func, x):
+    def getv_sgd(self, func, x, v):
+        """
+        get velocity for SGD,
+        if not considered, return 0
+        """
+        return 0 
+
+    def getupd_sgd(self, func, x, v):
         """
         get update vector for SGD
         """
@@ -34,4 +41,9 @@ class Stochastic_gradient(Base_optimization):
         """
         Stochastic gradient descent
         """
-        return self.iteration(func, self.getupd_sgd, self.getrate_sgd, xinit)
+        return self.iteration(
+            func, 
+            self.getv_sgd, 
+            self.getupd_sgd, 
+            self.getrate_sgd, 
+            xinit)

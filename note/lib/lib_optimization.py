@@ -52,24 +52,27 @@ class Base_optimization():
         """
         return curx + eps*d 
     
-    def iteration(self, func, getupd, getrate, xinit):
+    def iteration(self, func, getv, getupd, getrate, xinit):
         """
         iteration optimization method until converge
 
         Input:
             func: objective function, func(x)
-            getupd: the function to get update vector, getupd(function, x)
+            getv: the function to get velocity, getv(function, x, v), if not considered, return 0.
+            getupd: the function to get update vector, getupd(function, x, v)
             getrate: the function to get learning rate, getrate(func, curx, d)
             xinit: the initial value of x
         Output:
             list of x and #Iter
         """
         x_lst = [xinit]     # value list
+        v = 0               # initial velocity
         itr = self.maxiter; flag = 1 
         ##### iteration #####
         for i in range(1, self.maxiter):
-            curx = x_lst[-1]        # current x
-            d = getupd(func, curx)  # update vector
+            curx = x_lst[-1]            # current x
+            v = getv(func, curx, v)     # get velocity
+            d = getupd(func, curx, v)   # update vector
             eps = getrate(func, curx, i, d)  # learning rate
             newx = self.update_gradient(curx, eps, d)
             if self.check_converge(func, curx, newx) and flag == 1:

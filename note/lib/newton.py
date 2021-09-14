@@ -11,7 +11,14 @@ class Newton(Base_optimization):
     def __init__(self, maxiter, delta=1e-6):
         super().__init__(maxiter, delta)
     
-    def getupd_newton(self, func, x):
+    def getv_newton(self, func, x, v):
+        """
+        get velocity for Newton method,
+        if not considered, return 0
+        """
+        return 0 
+
+    def getupd_newton(self, func, x, v):
         """
         get update vector for Newton method
         """
@@ -29,4 +36,9 @@ class Newton(Base_optimization):
         """
         Newton method
         """
-        return self.iteration(func, self.getupd_newton, self.getrate_newton, xinit)
+        return self.iteration(
+            func, 
+            self.getv_newton, 
+            self.getupd_newton, 
+            self.getrate_newton, 
+            xinit)

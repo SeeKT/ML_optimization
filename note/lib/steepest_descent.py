@@ -11,7 +11,14 @@ class Steepest(Base_optimization):
         self.beta = beta 
         self.gamma = gamma 
     
-    def getupd_steepest(self, func, x):
+    def getv_steepest(self, func, x, v):
+        """
+        get velocity for steepest method
+        if not considered, return 0
+        """
+        return 0 
+
+    def getupd_steepest(self, func, x, v):
         """
         get update vector for steepest method
         d = (-1)*grad
@@ -41,5 +48,10 @@ class Steepest(Base_optimization):
         """
         Steepest descent
         """
-        return self.iteration(func, self.getupd_steepest, self.getrate_steepest, xinit)
+        return self.iteration(
+            func, 
+            self.getv_steepest, 
+            self.getupd_steepest, 
+            self.getrate_steepest, 
+            xinit)
         
