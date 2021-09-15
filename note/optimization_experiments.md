@@ -25,4 +25,10 @@ f_3(x, y) = -4 e^{-(x^2 + y^2)} - 2 e^{-((x + 4)^2 + (y + 4)^2)}  \tag{3}$$
 
 <img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/distorted/all/trajectory_distorted.gif?raw=true">
 
-この関数は凸関数であり，Newton法が高速に収束している．
+<img src="https://github.com/SeeKT/ML_optimization/blob/master/note/fig/distorted/all/value_distorted.png?raw=true">
+
+- この関数は凸関数．Newton 法が非常に高速．
+- Momentum や NAG では値の振動が見られる．
+
+<div style="page-break-before:always"></div>
+
