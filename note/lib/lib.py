@@ -47,6 +47,22 @@ class Test_function():
         """
         return x[0]**2/4 + x[1]**2
     
+    def test_func_2(self, x):
+        """
+        (This function is not listed in Wikipedia)
+        f(x) = x^3 + y^3 - 3xy
+        """
+        return x[0]**3 + x[1]**3 - 3*x[0]*x[1]
+    
+    def test_func_3(self, x):
+        """
+        (This function is not listed in Wikipedia)
+        f(x) = -4 exp(-(x^2 + y^2)) - 2 exp(-(x + 4)^2 - (y + 4)^2)
+        """
+        first_term = -4*np.exp(-(x[0]**2 + x[1]**2))
+        second_term = -2*np.exp(-(x[0] + 4)**2 - (x[1] + 4)**2)
+        return first_term + second_term
+
     def rosenbrock(self, x):
         """
         Rosenbrock function,

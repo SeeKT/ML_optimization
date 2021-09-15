@@ -4,8 +4,8 @@
 ## ディレクトリ構成
 ```
 |- .devcontainer/ -> dockerの設定ファイル類
-|- note/
-    |- lib/ -> note/の階層のipynbで使うクラス等を定義したファイル類
+|- note/ -> 最適化手法の勉強用．Artificial な関数の最適化を行う．
+    |- lib/ -> note/の階層のipynb等で使うクラス等を定義したファイル類
 ```
 
 ## 実行環境
