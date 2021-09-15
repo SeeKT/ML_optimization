@@ -189,7 +189,6 @@ $$ \varepsilon \coloneqq \frac{(\Delta t)^2}{m + \mu \Delta t}, \ \ \alpha \colo
 
 つまり，モーメンタム法の更新は $m > 0$ の質量を持つ粒子が摩擦と位置エネルギーによってパラメータ空間を運動しているときの位置の変化であるというように解釈できる．
 
-<div style="page-break-before:always"></div>
 
 ### 2.3 Nesterov Momentum
 Momentum SGD の収束への加速を早めるために，現在の速度が適用された後の $\boldsymbol{\theta}$ に関して勾配を評価する方法．
@@ -203,7 +202,11 @@ SGD の場合，収束率は改善されない[^1]．
 <div style="page-break-before:always"></div>
 
 ## 3. 実用的なアルゴリズム
+以下では，deep の最適化によく用いられるアルゴリズムを簡単にまとめる．これらのアルゴリズムは，学習率を adaptive に調整するようなものである．
+
 ### 3.1 AdaGrad
+![png](./fig/algorithm_list/3.1_adagrad.png "AdaGrad のアルゴリズム")
+
 深層学習などに用いられる高次元の問題では，勾配が急な方向へは即座に収束するが，勾配が緩やかな方向の収束が遅いということが起こりうる．また，Momentum では極値に近づいても極値付近で振動し続けるといったことが起こりうる．
 
 AdaGradは，過去の勾配の情報に基づいて勾配を各次元ごとに調整しよう，という方法である[^3]．具体的には，勾配の全ての履歴の2乗和の平方根に反比例するようにスケーリングすることで，パラメータの学習率を次元ごとに独立に適合させる，というようなもの．
@@ -211,7 +214,6 @@ $\rightsquigarrow$ 勾配が大きい方向は学習率を素早く低下させ�
 
 [^3]: J. Duchi, et al., "[Adaptive Subgradient Methods for Online Learning and Stochastic Optimization](https://jmlr.org/papers/v12/duchi11a.html)," Journal of Machine Learning Research, vol. 12, no. 61, pp. 2121-2159, 2011.
 
-![png](./fig/algorithm_list/3.1_adagrad.png "AdaGrad のアルゴリズム")
 
 Algorithm 3.1 に AdaGrad の更新則を示す．$\odot$ は，Hadamard 積を表す．
 
@@ -221,14 +223,45 @@ Algorithm 3.1 に AdaGrad の更新則を示す．$\odot$ は，Hadamard 積を�
 <div style="page-break-before:always"></div>
 
 ### 3.2 RMSProp
+![png](./fig/algorithm_list/3.2_rmsprop.png "RMSProp のアルゴリズム")
+
 AdaGrad は，過去の勾配の蓄積により学習率が低下し続けるので，非凸関数に適用すると収束が遅いという問題があった．
 RMSProp は，AdaGrad における gradient の累積を，指数的に重み付けした移動平均に変えることで，非凸関数における性能を改善したもの[^4]．
 
 [^4]: G. Hinton, [Neural Network for Machine Learning Lecture 6e](http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf), 2012, Accessed on 2021/9/15.
 
-![png](./fig/algorithm_list/3.2_rmsprop.png "RMSProp のアルゴリズム")
-
 Algorithm 3.2 に RMSProp の更新則を示す．AdaGrad との主な違いは，(3.4) 式で過去の勾配を $\rho$ 倍して取り入れていることである．
 $\rightsquigarrow$ 過去の勾配の情報を忘れるイメージ
 
 - RMSProp は，deep neural networks において，効率的で実用的な最適化アルゴリズムであると知られている[^1]．
+
+<div style="page-break-before:always"></div>
+
+### 3.3 Adam
+![png](./fig/algorithm_list/3.3_adam.png "Adam のアルゴリズム")
+
+Adam は，RMSProp を改良したものであり，現在でも実用的に使われている最適化アルゴリズムである[^5]．Gradient の 1次モーメントと2次モーメントの推定量を用いて，パラメータの各次元の学習率を独立に調整している．
+
+[^5]: D. P. Kingma and J. Ba, "[Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980), " arXiv preprint arXiv:1412.6980, 2014.
+
+Algorithm 3.3 に Adam の更新則を示す．
+
+$\bm{s}$ が gradient の移動平均 (1次モーメント) で，$\bm{r}$ が gradient の 2乗の移動平均 (2次モーメント) である．ここで，(3.8) 式の役割について簡単にまとめる ((3.9) 式も同様)．
+
+時点 $t$ における勾配と1次モーメントをそれぞれ $\bm{g}_t, \bm{s}_t$ と表す．ここで，$\bm{g}_t$ はある分布 $p(\bm{g}_t)$ に従うとする．
+(3.6) 式は以下のように書き直される．
+
+$$\bm{s}_t = \rho_1 \bm{s}_{t - 1} + (1 - \rho_1) \bm{g}_t \\ = \rho_1(\rho_1 \bm{s}_{t - 2} + (1 - \rho_1)\bm{g}_{t - 1}) + (1 - \rho_1)\bm{g}_t \\ = \rho_1^2 \bm{s}_{t - 2} + (1 - \rho_1)(\rho_1 \bm{g}_{t - 1} + \bm{g}_t) \\  \vdots \\ = (1 - \rho_1)\sum_{i = 1}^t \rho_1^{t - i} \bm{g}_i \tag{3.11}$$
+
+ここで，勾配の1次モーメントの推定量の期待値 $\mathbb{E}[\bm{s}_t]$ が真の値 $\mathbb{E}[\bm{g}_t]$ とどのような関係にあるかを確かめるため，(3.11) の両辺の期待値をとる．
+
+$$ \mathbb{E}[\bm{s}_t] = \mathbb{E}\left[(1 - \rho_1)\sum_{i = 1}^t \rho_1^{t - i} \bm{g}_i  \right] \tag{3.12}$$ $$
+= \mathbb{E}[\bm{g}_t] \cdot (1 - \rho_1) \sum_{i = 1}^t \rho_1^{t - i} + \zeta \tag{3.13}$$ $$
+= \mathbb{E}[\bm{g}_t] \cdot (1 - \rho_1^t) + \zeta \tag{3.14}$$
+
+ここで，1次モーメント $\mathbb{E}[\bm{g}_t]$ が定常であるとき，$\zeta = 0$ であり，そうでないときは過去の勾配の重みを小さく保つように $\rho_1$ を選べるので，$\zeta$ は小さい値に保つことができる．
+Algorithm 3.3 では bias を正しく求めるために，$\bm{s}$ を $1 - \rho_1^t$ で割っている．
+
+<div style="page-break-before:always"></div>
+
+### 参考文献
