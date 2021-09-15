@@ -106,6 +106,64 @@ class Plot_value(Plot_func):
         ani.save(gif_name, writer="Pillow")
         #####################
 
+    def plot_value_eachmethod(self, ax1, ax2, x_method, itr, method_name):
+        """
+        Plot value for each method
+        """
+        x_val = x_method.T[0]; y_val = x_method.T[1]
+        ax1.plot(x_val[:itr], label=method_name)
+        ax2.plot(y_val[:itr], label=method_name)
+
+
+    def plot_value(self, func, x_steepest, x_newton, x_momentum, x_nag, x_adagrad, x_rmsprop, x_adam, itr, func_name):
+        """
+        Plot value of the function
+        """
+        ##### dir of fig #####
+        base_dir = "./fig/"
+        fig_dir = base_dir + "{0}/all/".format(func_name)
+        if not os.path.isdir(fig_dir):
+            os.makedirs(fig_dir)
+        fig_name = "value_{0}".format(func_name)
+        eps_name = fig_dir + fig_name + ".eps"
+        png_name = fig_dir + fig_name + ".png"
+        ######################
+
+        fig = plt.figure(figsize=(16, 8))
+        plt.subplots_adjust(wspace=0.4, hspace=0.6)
+        ax1 = fig.add_subplot(1,2,1); ax2 = fig.add_subplot(1,2,2)
+        ax1.set_xlim([0, itr]); ax2.set_xlim([0, itr])
+        ax1.set_xlabel('iteration'); ax2.set_xlabel('iteration')
+        ax1.set_ylabel(r'$x$'); ax2.set_ylabel(r'$y$')
+        ##### plot each method #####
+        self.plot_value_eachmethod(
+            ax1, ax2, x_steepest, itr, "steepest"
+        )
+        self.plot_value_eachmethod(
+            ax1, ax2, x_newton, itr, "Newton"
+        )
+        self.plot_value_eachmethod(
+            ax1, ax2, x_momentum, itr, "Momentum"
+        )
+        self.plot_value_eachmethod(
+            ax1, ax2, x_nag, itr, "NAG"
+        )
+        self.plot_value_eachmethod(
+            ax1, ax2, x_adagrad, itr, "AdaGrad"
+        )
+        self.plot_value_eachmethod(
+            ax1, ax2, x_rmsprop, itr, "RMSProp"
+        )
+        self.plot_value_eachmethod(
+            ax1, ax2, x_adam, itr, "Adam"
+        )
+        ############################
+        ax1.legend(loc='best'); ax2.legend(loc='best')
+        plt.savefig(png_name, format="PNG")
+        plt.savefig(eps_name, format="EPS")
+
+
+
 
 
 
@@ -159,6 +217,7 @@ def main():
     ##### plot #####
     x_range = np.linspace(-2.0, 2.0, 51); y_range = np.linspace(-2.0, 2.0, 51)
     iter_max = max(itr_distorted_steepest, itr_distorted_newton, itr_distorted_momentum, itr_distorted_nag, itr_distorted_adagrad, itr_distorted_rmsprop, itr_distorted_adam)
+    
     pv.plot_trajectory(
         func=test.distorted,
         x_range=x_range,
@@ -171,6 +230,19 @@ def main():
         x_rmsprop=distorted_rmsprop_x,
         x_adam=distorted_adam_x,
         itr=iter_max,
+        func_name="distorted"
+    )
+    
+    pv.plot_value(
+        func=test.distorted,
+        x_steepest=distort_steepest_x,
+        x_newton=distort_newton_x,
+        x_momentum=distort_momentum_x,
+        x_nag=distorted_nag_x,
+        x_adagrad=distorted_adagrad_x,
+        x_rmsprop=distorted_rmsprop_x,
+        x_adam=distorted_adam_x,
+        itr=500,
         func_name="distorted"
     )
     ################
@@ -204,6 +276,7 @@ def main():
     ##### plot #####
     x_range = np.linspace(-0.5, 1.5, 51); y_range = np.linspace(-0.5, 1.5, 51)
     iter_max = max(itr_f2_steepest, itr_f2_newton, itr_f2_momentum, itr_f2_nag, itr_f2_adagrad, itr_f2_rmsprop, itr_f2_adam)
+    
     pv.plot_trajectory(
         func=test.test_func_2,
         x_range=x_range,
@@ -216,6 +289,19 @@ def main():
         x_rmsprop=f2_rmsprop_x,
         x_adam=f2_adam_x,
         itr=iter_max,
+        func_name="test_func_2"
+    )
+    
+    pv.plot_value(
+        func=test.test_func_2,
+        x_steepest=f2_steepest_x,
+        x_newton=f2_newton_x,
+        x_momentum=f2_momentum_x,
+        x_nag=f2_nag_x,
+        x_adagrad=f2_adagrad_x,
+        x_rmsprop=f2_rmsprop_x,
+        x_adam=f2_adam_x,
+        itr=500,
         func_name="test_func_2"
     )
     ################
@@ -250,6 +336,8 @@ def main():
     ##### plot #####
     x_range = np.linspace(-6.0, 2.0, 51); y_range = np.linspace(-6.0, 2.0, 51)
     iter_max = max(itr_f3_steepest, itr_f3_newton, itr_f3_momentum, itr_f3_nag, itr_f3_adagrad, itr_f3_rmsprop, itr_f3_adam)
+
+    
     pv.plot_trajectory(
         func=test.test_func_3,
         x_range=x_range,
@@ -262,6 +350,20 @@ def main():
         x_rmsprop=f3_rmsprop_x,
         x_adam=f3_adam_x,
         itr=iter_max,
+        func_name="test_func_3"
+    )
+    
+
+    pv.plot_value(
+        func=test.test_func_3,
+        x_steepest=f3_steepest_x,
+        x_newton=f3_newton_x,
+        x_momentum=f3_momentum_x,
+        x_nag=f3_nag_x,
+        x_adagrad=f3_adagrad_x,
+        x_rmsprop=f3_rmsprop_x,
+        x_adam=f3_adam_x,
+        itr=500,
         func_name="test_func_3"
     )
     ################
