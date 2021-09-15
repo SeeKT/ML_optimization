@@ -66,7 +66,7 @@ class Base_optimization():
             list of x and #Iter
         """
         x_lst = [xinit]     # value list
-        v = 0               # initial velocity
+        v = np.zeros_like(xinit)               # initial velocity
         itr = self.maxiter; flag = 1 
         ##### iteration #####
         for i in range(1, self.maxiter):
