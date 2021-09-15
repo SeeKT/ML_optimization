@@ -211,9 +211,24 @@ $\rightsquigarrow$ 勾配が大きい方向は学習率を素早く低下させ�
 
 [^3]: J. Duchi, et al., "[Adaptive Subgradient Methods for Online Learning and Stochastic Optimization](https://jmlr.org/papers/v12/duchi11a.html)," Journal of Machine Learning Research, vol. 12, no. 61, pp. 2121-2159, 2011.
 
-![png](./fig/algorithm_list/3.1_adagrad.png "AdaGradのアルゴリズム")
+![png](./fig/algorithm_list/3.1_adagrad.png "AdaGrad のアルゴリズム")
 
 Algorithm 3.1 に AdaGrad の更新則を示す．$\odot$ は，Hadamard 積を表す．
 
 - AdaGradは deep では上手くいかないこともある．
     - 学習初期に過度に学習率を低下させてしまう．
+
+<div style="page-break-before:always"></div>
+
+### 3.2 RMSProp
+AdaGrad は，過去の勾配の蓄積により学習率が低下し続けるので，非凸関数に適用すると収束が遅いという問題があった．
+RMSProp は，AdaGrad における gradient の累積を，指数的に重み付けした移動平均に変えることで，非凸関数における性能を改善したもの[^4]．
+
+[^4]: G. Hinton, [Neural Network for Machine Learning Lecture 6e](http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf), 2012, Accessed on 2021/9/15.
+
+![png](./fig/algorithm_list/3.2_rmsprop.png "RMSProp のアルゴリズム")
+
+Algorithm 3.2 に RMSProp の更新則を示す．AdaGrad との主な違いは，(3.4) 式で過去の勾配を $\rho$ 倍して取り入れていることである．
+$\rightsquigarrow$ 過去の勾配の情報を忘れるイメージ
+
+- RMSProp は，deep neural networks において，効率的で実用的な最適化アルゴリズムであると知られている[^1]．
