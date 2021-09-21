@@ -8,7 +8,7 @@
 
 $$ \underset{\boldsymbol{x}}{\text{minimize}} \ \ f(\boldsymbol{x}) \ \ \text{subject to} \ \ \boldsymbol{x} \in S \subset \mathbb{R}^N.  \tag{1}$$
 
-ここで，$f: \mathbb{R^N} \to \mathbb{R}$ とし，適当な微分可能性を仮定する．
+ここで，$f: \mathbb{R^N} \to \mathbb{R}$ とし，適当な微分可能性を仮定する (微分可能性は使う手法に依る)．
 
 
 ## 解法
@@ -66,8 +66,8 @@ $$ \min \{f(\boldsymbol{x}^k + \varepsilon d(\boldsymbol{x}^k)) \, | \, \varepsi
 
 #### 動作
 1. (初期化) 初期値 $\boldsymbol{x}^0$ を定める．$k \leftarrow 0$.
-1. (終了判定) $\|f(\boldsymbol{x}^{k + 1}) - f(\boldsymbol{x}^k)  \| < \delta$ であれば，$\boldsymbol{x}^k$ を出力して終了．
-1. (反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla f(\boldsymbol{x}^k)$. $\varepsilon_k \leftarrow$ 直線探索の近似解とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．
+1. (反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla f(\boldsymbol{x}^k)$. $\varepsilon_k \leftarrow$ 直線探索の近似解とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．
+1. (終了判定) $\|f(\boldsymbol{x}^{k + 1}) - f(\boldsymbol{x}^k)  \| < \delta$ であれば，$\boldsymbol{x}^k$ を出力して終了．そうでなければ $k \leftarrow k + 1$ として 2. へ戻る．
 
 ### Remark
 - 最急降下法は，1次近似で最良の方向へ進む．
@@ -102,8 +102,8 @@ $$ d(\boldsymbol{x}^k) = - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbo
 
 #### 動作
 1. (初期化) 初期値 $\boldsymbol{x}^0$ を定める．$k \leftarrow 0$.
-1. (終了判定) $\|f(\boldsymbol{x}^{k + 1}) - f(\boldsymbol{x}^k)  \| < \varepsilon$ であれば，$\boldsymbol{x}^k$ を出力して終了．
-1. (反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k)$, $\varepsilon_k \leftarrow 1$ とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．$k \leftarrow k + 1$ として 2. へ戻る．
+1. (反復) $d(\boldsymbol{x}^k) \leftarrow - \nabla^2 f(\boldsymbol{x}^k)^{-1} \nabla f(\boldsymbol{x}^k)$, $\varepsilon_k \leftarrow 1$ とし，(4) で $\boldsymbol{x}^{k + 1}$ を求める．
+1. (終了判定) $\|f(\boldsymbol{x}^{k + 1}) - f(\boldsymbol{x}^k)  \| < \varepsilon$ であれば，$\boldsymbol{x}^k$ を出力して終了．そうでなければ $k \leftarrow k + 1$ として 2. へ戻る．
 
 #### Remark
 ニュートン法は2次の最適な方向へ進む．実際，Taylor 展開を考えると

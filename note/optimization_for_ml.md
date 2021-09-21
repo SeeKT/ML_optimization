@@ -41,7 +41,7 @@ where $L$ is the per-example loss $L(\boldsymbol{x}, y, \boldsymbol{\theta}) = -
 
 このような和の形で記述されたコスト関数に対して，gradient descent は以下を計算する必要がある．
 
-$$ \nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta}) = \frac{1}{m} \nabla_{\boldsymbol{\theta}} L(\boldsymbol{x}^{(i)}, y^{(i)}, \boldsymbol{\theta}). \tag{1.2}$$
+$$ \nabla_{\boldsymbol{\theta}} J(\boldsymbol{\theta}) = \frac{1}{m} \nabla_{\boldsymbol{\theta}} \sum_{i = 1}^m  L(\boldsymbol{x}^{(i)}, y^{(i)}, \boldsymbol{\theta}). \tag{1.2}$$
 
 この計算は，$O(m)$ である．つまり，すべてのサンプルを勾配の計算に用いる gradient descent では，training set のサイズに比例して勾配計算にかかる時間が長くなる．
 
@@ -113,19 +113,6 @@ $\rightsquigarrow$ Main question は，どのように $\varepsilon_0$ を選ぶ
 - 大きすぎると学習曲線が振動する．
 - 小さすぎると学習に時間がかかる．
 
-一般に，total training time や final cost value の観点での optimal initial rate は，最初の100 iterations 後で最適な performance を与える learning rate より高い．
-$\rightsquigarrow$ 最初の数百回の iterations をモニターして，そのとき最も良い performance を与えた学習率よりも大きいものを選ぶのが良い．ただし，大きくしすぎると学習が不安定になりうる．
-
-SGD や関連する minibatch or online gradient-based optimization の重要な特徴
-
-- 更新にかかる計算時間が training examples の増加に依らない
-
-$\rightsquigarrow$ training examples が増加しても収束する．
-
-最適化アルゴリズムの収束率は，**excess error** $J(\boldsymbol{\theta}) - \min_{\boldsymbol{\theta}} J(\boldsymbol{\theta})$ を用いて測ることが多い．
-
-- SGD を凸計画問題に適用した場合，$k$ 回の iteration の後の excess error は，$O(1/\sqrt{k})$．強凸の場合，$O(1/k)$.
-    - この下限は，extra conditions を仮定しないと改善されない．
 
 <div style="page-break-before:always"></div>
 
@@ -147,7 +134,7 @@ $\rightsquigarrow$ モーメンタム法は，過去の勾配の情報を割り�
 - $\boldsymbol{v}$: 速度
 - $\alpha \in [0, \ 1)$: 過去の勾配の寄与が指数関数的に減衰する速さを決定するハイパーパラメータ
 
-![png](./fig/algorithm_list/2.2_momentum.png "Momentum の更新則")
+![png](https://github.com/SeeKT/ML_optimization/blob/master/note/fig/algorithm_list/2.2_momentum.png?raw=true "Momentum の更新則")
 
 Algorithm 2.2 にモーメンタムの更新則を示す．
 
@@ -175,7 +162,7 @@ $$ m \frac{d^2 \boldsymbol{\theta}}{dt^2} + \mu \frac{d \boldsymbol{\theta}}{dt}
 
 となる．オイラー法を用いると，以下の離散時間のダイナミクスを得る．
 
-$$ m \frac{\boldsymbol{\theta}_{n + 1} - 2\boldsymbol{\theta}_n + \boldsymbol{\theta}_{n - 1} }{(\Delta t)^2} + \mu \frac{\boldsymbol{\theta}_{n} - \boldsymbol{\theta}_{n - 1}}{\Delta t} = - \nabla_{\boldsymbol{\theta}} E(\boldsymbol{\theta}) \tag{2.11}$$
+$$ m \frac{\boldsymbol{\theta}_{n + 1} - 2\boldsymbol{\theta}_n + \boldsymbol{\theta}_{n - 1} }{(\Delta t)^2} + \mu \frac{\boldsymbol{\theta}_{n + 1} - \boldsymbol{\theta}_{n}}{\Delta t} = - \nabla_{\boldsymbol{\theta}} E(\boldsymbol{\theta}) \tag{2.11}$$
 
 (2.11) を整理すると，
 
@@ -193,7 +180,7 @@ $$ \varepsilon \coloneqq \frac{(\Delta t)^2}{m + \mu \Delta t}, \ \ \alpha \colo
 ### 2.3 Nesterov Momentum
 Momentum SGD の収束への加速を早めるために，現在の速度が適用された後の $\boldsymbol{\theta}$ に関して勾配を評価する方法．
 
-![png](./fig/algorithm_list/2.3_nag.png "NAG の更新則")
+![png](https://github.com/SeeKT/ML_optimization/blob/master/note/fig/algorithm_list/2.3_nag.png?raw=true "NAG の更新則")
 
 Algorithm 2.3 に Nesterov momentum の更新則を示す．
 
@@ -205,7 +192,7 @@ SGD の場合，収束率は改善されない[^1]．
 以下では，deep の最適化によく用いられるアルゴリズムを簡単にまとめる．これらのアルゴリズムは，学習率を adaptive に調整するようなものである．
 
 ### 3.1 AdaGrad
-![png](./fig/algorithm_list/3.1_adagrad.png "AdaGrad のアルゴリズム")
+![png](https://github.com/SeeKT/ML_optimization/blob/master/note/fig/algorithm_list/3.1_adagrad.png?raw=true "AdaGrad のアルゴリズム")
 
 深層学習などに用いられる高次元の問題では，勾配が急な方向へは即座に収束するが，勾配が緩やかな方向の収束が遅いということが起こりうる．また，Momentum では極値に近づいても極値付近で振動し続けるといったことが起こりうる．
 
@@ -223,7 +210,7 @@ Algorithm 3.1 に AdaGrad の更新則を示す．$\odot$ は，Hadamard 積を�
 <div style="page-break-before:always"></div>
 
 ### 3.2 RMSProp
-![png](./fig/algorithm_list/3.2_rmsprop.png "RMSProp のアルゴリズム")
+![png](https://github.com/SeeKT/ML_optimization/blob/master/note/fig/algorithm_list/3.2_rmsprop.png?raw=true "RMSProp のアルゴリズム")
 
 AdaGrad は，過去の勾配の蓄積により学習率が低下し続けるので，非凸関数に適用すると収束が遅いという問題があった．
 RMSProp は，AdaGrad における gradient の累積を，指数的に重み付けした移動平均に変えることで，非凸関数における性能を改善したもの[^4]．
@@ -238,7 +225,7 @@ $\rightsquigarrow$ 過去の勾配の情報を忘れるイメージ
 <div style="page-break-before:always"></div>
 
 ### 3.3 Adam
-![png](./fig/algorithm_list/3.3_adam.png "Adam のアルゴリズム")
+![png](https://github.com/SeeKT/ML_optimization/blob/master/note/fig/algorithm_list/3.3_adam.png?raw=true "Adam のアルゴリズム")
 
 Adam は，RMSProp を改良したものであり，現在でも実用的に使われている最適化アルゴリズムである[^5]．Gradient の 1次モーメントと2次モーメントの推定量を用いて，パラメータの各次元の学習率を独立に調整している．
 
