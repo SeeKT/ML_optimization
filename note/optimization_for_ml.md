@@ -80,6 +80,8 @@ Data-generating distribution からの i.i.d sampling によって $m$ examples 
 Algorithm 2.1 に SGD の更新則を示す (1節の $m^{\prime}$ を $m$ と思う)．
 アルゴリズムを見るとわかるが，steepest descent との違いは勾配を求めるときにすべてのデータを用いるのではなく，ランダムに選んだ $m$ 個の examples からなる minibatch を用いるという点である．
 
+これにより，局所最適に陥った際に抜け出せる可能性がある．というのも，ある minibatch を用いて得られた勾配と他の minibatch を用いて得られた勾配が異なるため，ある minibatch においては局所最適であり，勾配が $0$ と計算されても，他の minibatch では局所最適ではなく，非 $0$ の勾配が得られるからである．
+
 SGD において重要なアルゴリズムは，learning rate である．実用的には，徐々に learning rate を減らしていくことが必要であるので，iteration $k$ における learning rate を $\varepsilon_k$ と書いている．
 
 - SGD gradient estimator は，$m$ 個の training examples の random sampling によって noise を生じる．
