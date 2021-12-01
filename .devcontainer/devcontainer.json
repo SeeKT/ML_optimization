@@ -12,7 +12,7 @@
 	// ここに記載している"service"名とdocker-compose.ymlに記載している"service"を一致させる
 	"service": "python",
 	// コンテナ内に入ったときのworkdir
-	"workspaceFolder": "/code",
+	"workspaceFolder": "/home/user/code",
 	// VSCodeを閉じたときのアクション
 	"shutdownAction": "stopCompose"
 }
